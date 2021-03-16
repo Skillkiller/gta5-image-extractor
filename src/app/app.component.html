@@ -1,1 +1,26 @@
+<mat-toolbar>
+  <span>PGTA Exporter</span>
+</mat-toolbar>
+
+<mat-expansion-panel hideToggle>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Explanation
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>This is the primary content of the panel.</p>
+</mat-expansion-panel>
+
+<input type="file" (change)="fileChange($event)" multiple>
+<mat-divider></mat-divider>
+<div *ngFor="let item of filesReaded">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{item.filename}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="item.source" style="max-width: 536px;">
+  </mat-card>
+</div>
+
+
 <router-outlet></router-outlet>
