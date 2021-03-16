@@ -1,0 +1,46 @@
+
+name: Deploy page to Github Pages
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - ".github/**"
+      - ".vscode/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.x'
+      
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: npm install
+        run: npm install
+      
+      - name: Build project
+        run: npm run-script deploy
+      
+      - name: Move files to docs
+        run: mv -v dist/*/* docs/
+      
+      - name: Push docs folder
+        uses: actions-x/commit@v2
+        with:
+          email: actions@github.com
+          name: GitHub Actions
+          branch: public
+          files: docs/
+          token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
